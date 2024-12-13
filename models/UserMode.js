@@ -30,6 +30,7 @@ const userSchema = mongoose.Schema(
     },
     // password
     password: { type: String, required: true },
+    //rols
     role: {
       type: String,
       enum: ["admin", "normal", "verifiedUser", "guide"],

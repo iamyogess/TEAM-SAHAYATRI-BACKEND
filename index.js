@@ -1,13 +1,22 @@
 import express from "express";
 import dotenv from "dotenv";
+import cors from "cors";
 import { connectDb } from "./configs/connectDb.js";
-dotenv.config();
+import {
+  errorResponseHandler,
+  invalidPathHandler,
+} from "./middlewares/errorHandlers.js";
 
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || PORT;
 
-
 connectDb();
+
+app.use(express.json());
+app.use(cors());
+app.use(errorResponseHandler);
+app.use(invalidPathHandler);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

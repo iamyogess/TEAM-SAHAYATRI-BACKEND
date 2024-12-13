@@ -1,6 +1,5 @@
 import multer from "multer";
 import path, { dirname } from "path";
-import fs from "fs";
 import { fileURLToPath } from "url";
 
 const __dirname = fileURLToPath(import.meta.url); //file
