@@ -316,7 +316,9 @@ export const getGuideVerificationRequest = async (req, res, next) => {
   if (!user) {
     return res.status(400).json({ message: "No user found!", success: false });
   }
-  return res.status(200).json({ message: "Guide requests!", success: true });
+  return res
+    .status(200)
+    .json({ user, message: "Guide requests!", success: true });
 };
 
 // @desc getVerifiedGuides
