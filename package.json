@@ -1,0 +1,21 @@
+{
+  "name": "team-sahayatri",
+  "version": "1.0.0",
+  "description": "backend code for team sahayatri (codefest hackathon 2024)",
+  "main": "index.js",
+  "types": "m",
+  "scripts": {
+   "start": "nodemon index"
+  },
+  "author": "Yogesh Shrestha",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.8.4",
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^3.1.7"
+  }
+}
