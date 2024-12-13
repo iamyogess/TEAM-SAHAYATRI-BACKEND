@@ -341,7 +341,7 @@ export const verifiedGuide = async (req, res, next) => {
 
 export const uploadUserDocuments = async (req, res, next) => {
   try {
-    const upload = uploadPicture.array("userDocuments", 5);
+    const upload = uploadPicture.array("userDocuments", 3);
 
     upload(req, res, async function (err) {
       if (err) {
@@ -363,7 +363,7 @@ export const uploadUserDocuments = async (req, res, next) => {
           await updatedUser.save();
 
           // json web token
-          const token = jwt.sign(
+          const token = JWT.sign(
             {
               id: updatedUser._id,
               name: updatedUser.name,
