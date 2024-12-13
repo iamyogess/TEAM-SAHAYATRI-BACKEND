@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import { connectDb } from "./configs/connectDb.js";
+import userRoutes from "./routes/userRoute.js";
 import {
   errorResponseHandler,
   invalidPathHandler,
@@ -15,6 +16,8 @@ connectDb();
 
 app.use(express.json());
 app.use(cors());
+app.use("/api/users", userRoutes);
+
 app.use(errorResponseHandler);
 app.use(invalidPathHandler);
 
