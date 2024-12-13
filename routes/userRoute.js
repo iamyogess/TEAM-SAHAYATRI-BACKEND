@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  approveGuideRequest,
   becomeAGuideRequest,
   getGuideVerificationRequest,
   getUserProfile,
@@ -23,5 +24,6 @@ router.get(
   isAdmin,
   getGuideVerificationRequest
 );
+router.put("/approve-guide-request/:id", authGuard, isAdmin, approveGuideRequest);
 
 export default router;

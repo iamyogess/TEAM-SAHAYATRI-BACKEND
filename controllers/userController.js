@@ -242,7 +242,7 @@ export const becomeAGuideRequest = async (req, res, next) => {
 
 // @desc approve guide request
 // @access admins only
-// @route api/users/approve-guide-request
+// @route api/users/approve-guide-request/:id
 export const approveGuideRequest = async (req, res, next) => {
   try {
     const user = await UserModel.findById(req.params.id);
@@ -324,7 +324,6 @@ export const getGuideVerificationRequest = async (req, res, next) => {
 // @desc getVerifiedGuides
 // @access all
 // @route api/users/get-verified-guides
-
 export const verifiedGuide = async (req, res, next) => {
   try {
     const verifiedGuides = await UserModel.find({
