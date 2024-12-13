@@ -194,7 +194,7 @@ export const uploadProfilePicture = async (req, res, next) => {
 };
 
 // @desc become a guide request
-// @access normal users
+// @access normal user
 // @route api/users/guide-request
 export const becomeAGuideRequest = async (req, res, next) => {
   try {
