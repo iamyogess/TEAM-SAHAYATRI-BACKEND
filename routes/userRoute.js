@@ -8,6 +8,7 @@ import {
   registerUser,
   uploadProfilePicture,
   uploadUserDocuments,
+  verifiedGuide,
 } from "../controllers/userController.js";
 import { authGuard, isAdmin, isNormal } from "../middlewares/authMiddleware.js";
 const router = express.Router();
@@ -24,6 +25,12 @@ router.get(
   isAdmin,
   getGuideVerificationRequest
 );
-router.put("/approve-guide-request/:id", authGuard, isAdmin, approveGuideRequest);
+router.put(
+  "/approve-guide-request/:id",
+  authGuard,
+  isAdmin,
+  approveGuideRequest
+);
+router.get("/get-verified-guides", authGuard, verifiedGuide);
 
 export default router;

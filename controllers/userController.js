@@ -276,7 +276,7 @@ export const approveGuideRequest = async (req, res, next) => {
     }
 
     // alter roles
-    user.role == "guide";
+    user.role = "guide";
     user.becomeAGuide = false;
     await user.save();
 
@@ -597,6 +597,7 @@ export const bookGuide = async (req, res, next) => {
     const tds = totalCost * 0.05; // 5% TDS
     const profitMargin = totalCost * 0.15; // 15% profit margin
     const finalCost = totalCost + tds + profitMargin;
+    const afterTdsAndProfile = totalCost - tds - profitMargin;
 
     // Create a new reservation
     const reservation = {
@@ -628,6 +629,9 @@ export const bookGuide = async (req, res, next) => {
   }
 };
 
+
+
+// not required 
 export const costCalculation = async (req, res, next) => {
   try {
     const user = await UserModel.findById(req.user.id);
