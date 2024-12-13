@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "backend code for team sahayatri (codefest hackathon 2024)",
   "main": "index.js",
-  "types": "m",
+  "type": "module",
   "scripts": {
-   "start": "nodemon index"
+    "start": "nodemon index"
   },
   "author": "Yogesh Shrestha",
   "license": "ISC",
