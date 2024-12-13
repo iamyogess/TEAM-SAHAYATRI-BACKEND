@@ -1,59 +1,60 @@
 import mongoose, { Schema } from "mongoose";
 
-const userSchema = mongoose.Schema(
+const reservationSchema = new Schema(
   {
-    // email
-    name: { type: String, required: true },
-    email: {
-      type: String,
+    location: { type: String, required: true },
+    timePeriod: { type: String, required: true }, // Example: "2024-01-01 to 2024-01-02"
+    people: { type: Number, required: true },
+    reservedBy: {
+      type: Schema.Types.ObjectId,
+      ref: "UserModel", // Ensure it refers to the UserModel
       required: true,
-      unique: true,
-      sparse: true,
     },
+    guide: {
+      type: Schema.Types.ObjectId,
+      ref: "UserModel", // Guide reference
+      required: true,
+    },
+    cost: {
+      totalCost: { type: Number, required: true },
+      tds: { type: Number, required: true }, // Tax Deducted at Source (TDS)
+      profitMargin: { type: Number, required: true },
+      finalCost: { type: Number, required: true },
+      afterTdsAndProfit: { type: Number, required: true },
+    },
+    createdAt: { type: Date, default: Date.now },
+  },
+  { _id: false } // Prevent MongoDB from auto-creating an _id for nested schemas
+);
 
-    //phone no
-    // phoneNo: {
-    //   type: String,
-    //   required: true,
-    //   sparse: true,
-    //   unique: true,
-    //   validate: {
-    //     validator: (value) => {
-    //       return value.phoneNo || value.email;
-    //     },
-    //   },
-    // },
-    // password
+const userSchema = new Schema(
+  {
+    // Basic Information
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true, sparse: true },
     password: { type: String, required: true },
     profilePicture: { type: String },
-    //roles
+
+    // Roles and Verification
     role: {
       type: String,
       enum: ["admin", "normal", "verifiedUser", "guide"],
       default: "normal",
     },
-    about: { type: String },
-    reservationRequest: { type: Boolean, default: false },
-    reservationStatus: { type: Boolean, default: false },
     verified: { type: Boolean, default: false },
     becomeAGuide: { type: Boolean, default: false },
-    documents: { type: [] },
-    language: { type: [], required: true },
-    reservation: [
-      {
-        location: { type: String, required: true },
-        timePeriod: { type: String, required: true },
-        people: { type: Number, required: true },
-        reservedBy: {
-          type: Schema.Types.ObjectId,
-          ref: "User",
-          required: true,
-        },
-        cost: { type: String },
-        guide: { type: Schema.Types.ObjectId, ref: "User", required: true },
-        createdAt: { type: Date, default: Date.now },
-      },
-    ],
+
+    // Guide Information
+    about: { type: String },
+    language: { type: [String], required: true },
+
+    // Reservation System
+    reservationRequest: { type: Boolean, default: false },
+    reservationStatus: { type: Boolean, default: false },
+    reservation: [reservationSchema], // Use nested reservation schema
+
+    // Additional Information
+    documents: { type: [String] }, // List of document paths/URLs
   },
   { timestamps: true }
 );

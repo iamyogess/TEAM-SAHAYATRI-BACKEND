@@ -2,6 +2,7 @@ import express from "express";
 import {
   approveGuideRequest,
   becomeAGuideRequest,
+  bookGuide,
   getGuideVerificationRequest,
   getUserProfile,
   loginUser,
@@ -32,5 +33,6 @@ router.put(
   approveGuideRequest
 );
 router.get("/get-verified-guides", authGuard, verifiedGuide);
+router.post("/book-guide", authGuard, isNormal, bookGuide);
 
 export default router;

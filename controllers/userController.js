@@ -530,11 +530,11 @@ export const bookedUsers = async (req, res, next) => {
 // @desc book guide, it calculates cost for the trip, profit for the company, tds reduction,
 // @access verified users
 // @route api/users/book-guide
-
 export const bookGuide = async (req, res, next) => {
   try {
     const { guideId, location, timePeriod, people } = req.body;
 
+    // Validate input fields
     if (!guideId || !location || !timePeriod || !people) {
       return res.status(400).json({ message: "All fields are required" });
     }
@@ -542,10 +542,12 @@ export const bookGuide = async (req, res, next) => {
     const [startDate, endDate] = timePeriod
       .split(" to ")
       .map((date) => new Date(date));
+
     if (isNaN(startDate) || isNaN(endDate)) {
       return res.status(400).json({ message: "Invalid time period format" });
     }
 
+    // Find the requesting user
     const user = await UserModel.findById(req.user._id);
     if (!user) {
       return res.status(400).json({ message: "User does not exist" });
@@ -557,6 +559,7 @@ export const bookGuide = async (req, res, next) => {
         .json({ message: "Only normal users can book a guide!" });
     }
 
+    // Find the guide
     const guide = await UserModel.findById(guideId);
     if (!guide) {
       return res.status(404).json({ message: "Guide does not exist" });
@@ -568,7 +571,13 @@ export const bookGuide = async (req, res, next) => {
         .json({ message: "You can only book verified guides!" });
     }
 
-    const overlappingReservation = guide.reservations.some((reservation) => {
+    // Ensure `reservation` is an array
+    if (!Array.isArray(guide.reservation)) {
+      guide.reservation = [];
+    }
+
+    // Check for overlapping reservations
+    const overlappingReservation = guide.reservation.some((reservation) => {
       const resStart = new Date(reservation.timePeriod.split(" to ")[0]);
       const resEnd = new Date(reservation.timePeriod.split(" to ")[1]);
       return (
@@ -584,7 +593,7 @@ export const bookGuide = async (req, res, next) => {
       });
     }
 
-    // Calculate cost
+    // Calculate costs
     const durationInMilliseconds = endDate - startDate;
     const durationInHours = durationInMilliseconds / (1000 * 60 * 60);
 
@@ -597,7 +606,7 @@ export const bookGuide = async (req, res, next) => {
     const tds = totalCost * 0.05; // 5% TDS
     const profitMargin = totalCost * 0.15; // 15% profit margin
     const finalCost = totalCost + tds + profitMargin;
-    const afterTdsAndProfile = totalCost - tds - profitMargin;
+    const afterTdsAndProfit = totalCost - tds - profitMargin;
 
     // Create a new reservation
     const reservation = {
@@ -611,14 +620,17 @@ export const bookGuide = async (req, res, next) => {
         tds,
         profitMargin,
         finalCost,
+        afterTdsAndProfit,
       },
     };
 
-    // Add the reservation to the guide's reservations
+    // Update the guide and user records
     guide.reservationStatus = true;
-    guide.reservations.push(reservation);
+    guide.reservation.push(reservation);
     user.reservation.push(reservation);
+
     await guide.save();
+    await user.save();
 
     return res.status(201).json({
       message: "Guide booked successfully",
